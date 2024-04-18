@@ -8,22 +8,15 @@ import java.util.List;
 public class Employee {
 
 	private String employeeId;
-	private String firstName;
-	private String lastName;
-	private String idNumber;
-	private String address;
-	
-	private int yearJoined;
-	private int monthJoined;
-	private int dayJoined;
-	private int monthWorkingInYear;
-	
+    private String firstName;
+    private String lastName;
+    private String idNumber;
+    private String address;
+    private LocalDate joinedDate;
 	private boolean isForeigner;
-	private boolean gender; //true = Laki-laki, false = Perempuan
-	
-	private int monthlySalary;
-	private int otherMonthlyIncome;
-	private int annualDeductible;
+	private boolean gender;
+	private EmployeeInfo info; 
+
 	
 	private String spouseName;
 	private String spouseIdNumber;
@@ -31,17 +24,15 @@ public class Employee {
 	private List<String> childNames;
 	private List<String> childIdNumbers;
 	
-	public Employee(String employeeId, String firstName, String lastName, String idNumber, String address, int yearJoined, int monthJoined, int dayJoined, boolean isForeigner, boolean gender) {
-		this.employeeId = employeeId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.idNumber = idNumber;
-		this.address = address;
-		this.yearJoined = yearJoined;
-		this.monthJoined = monthJoined;
-		this.dayJoined = dayJoined;
-		this.isForeigner = isForeigner;
-		this.gender = gender;
+	public Employee(EmployeeInfo info) {
+		 this.employeeId = info.getEmployeeId();
+        this.firstName = info.getFirstName();
+        this.lastName = info.getLastName();
+        this.idNumber = info.getIdNumber();
+        this.address = info.getAddress();
+        this.joinedDate = LocalDate.of(info.getYearJoined(), info.getMonthJoined(), info.getDayJoined());
+        this.isForeigner = info.isForeigner();
+        this.gender = info.isGender();
 		
 		childNames = new LinkedList<String>();
 		childIdNumbers = new LinkedList<String>();
@@ -52,6 +43,8 @@ public class Employee {
 	 * Jika pegawai adalah warga negara asing gaji bulanan diperbesar sebanyak 50%
 	 */
 	
+	int monthlySalary = 0;
+
 	public void setMonthlySalary(int grade) {	
 		if (grade == 1) {
 			monthlySalary = 3000000;
@@ -71,10 +64,13 @@ public class Employee {
 		}
 	}
 	
+
+	int annualDeductible = 0;
 	public void setAnnualDeductible(int deductible) {	
 		this.annualDeductible = deductible;
 	}
 	
+	int otherMonthlyIncome = 0;
 	public void setAdditionalIncome(int income) {	
 		this.otherMonthlyIncome = income;
 	}
@@ -93,9 +89,10 @@ public class Employee {
 		
 		//Menghitung berapa lama pegawai bekerja dalam setahun ini, jika pegawai sudah bekerja dari tahun sebelumnya maka otomatis dianggap 12 bulan.
 		LocalDate date = LocalDate.now();
-		
-		if (date.getYear() == yearJoined) {
-			monthWorkingInYear = date.getMonthValue() - monthJoined;
+		int monthWorkingInYear;
+
+		if (date.getYear() == info.getYearJoined()) {
+			monthWorkingInYear = date.getMonthValue() - info.getMonthJoined();
 		}else {
 			monthWorkingInYear = 12;
 		}
