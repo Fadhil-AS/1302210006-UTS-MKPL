@@ -6,16 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Employee {
-
-	private String employeeId;
-    private String firstName;
-    private String lastName;
-    private String idNumber;
-    private String address;
     private LocalDate joinedDate;
-	private boolean isForeigner;
-	private boolean gender;
+	private biodataEmployee joinedBiodata;
 	private EmployeeInfo info; 
+	private biodataEmployee bio;
 
 	
 	private String spouseName;
@@ -24,15 +18,11 @@ public class Employee {
 	private List<String> childNames;
 	private List<String> childIdNumbers;
 	
-	public Employee(EmployeeInfo info) {
-		 this.employeeId = info.getEmployeeId();
-        this.firstName = info.getFirstName();
-        this.lastName = info.getLastName();
-        this.idNumber = info.getIdNumber();
-        this.address = info.getAddress();
+	private String dataEmployee;
+
+	public Employee(EmployeeInfo info, biodataEmployee bio) {
+		this.joinedBiodata = new biodataEmployee(bio.getEmployeeId(), bio.getFirstName(), bio.getLastName(), bio.getIdNumber(), bio.getAddress(), bio.isGender(), bio.isForeigner());
         this.joinedDate = LocalDate.of(info.getYearJoined(), info.getMonthJoined(), info.getDayJoined());
-        this.isForeigner = info.isForeigner();
-        this.gender = info.isGender();
 		
 		childNames = new LinkedList<String>();
 		childIdNumbers = new LinkedList<String>();
@@ -48,17 +38,17 @@ public class Employee {
 	public void setMonthlySalary(int grade) {	
 		if (grade == 1) {
 			monthlySalary = 3000000;
-			if (isForeigner) {
+			if (bio.isForeigner()) {
 				monthlySalary = (int) (3000000 * 1.5);
 			}
 		}else if (grade == 2) {
 			monthlySalary = 5000000;
-			if (isForeigner) {
+			if (bio.isForeigner()) {
 				monthlySalary = (int) (3000000 * 1.5);
 			}
 		}else if (grade == 3) {
 			monthlySalary = 7000000;
-			if (isForeigner) {
+			if (bio.isForeigner()) {
 				monthlySalary = (int) (3000000 * 1.5);
 			}
 		}
@@ -77,7 +67,7 @@ public class Employee {
 	
 	public void setSpouse(String spouseName, String spouseIdNumber) {
 		this.spouseName = spouseName;
-		this.spouseIdNumber = idNumber;
+		this.spouseIdNumber = bio.getIdNumber();
 	}
 	
 	public void addChild(String childName, String childIdNumber) {
