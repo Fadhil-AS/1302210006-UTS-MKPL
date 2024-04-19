@@ -11,12 +11,8 @@ public class Employee {
 	private EmployeeInfo info; 
 	private biodataEmployee bio;
 
-	
-	private String spouseName;
-	private String spouseIdNumber;
-
-	private List<String> childNames;
-	private List<String> childIdNumbers;
+	private Spouse spouse;
+	private List<Child> anak;
 	
 	private String dataEmployee;
 
@@ -24,8 +20,7 @@ public class Employee {
 		this.joinedBiodata = new biodataEmployee(bio.getEmployeeId(), bio.getFirstName(), bio.getLastName(), bio.getIdNumber(), bio.getAddress(), bio.isGender(), bio.isForeigner());
         this.joinedDate = LocalDate.of(info.getYearJoined(), info.getMonthJoined(), info.getDayJoined());
 		
-		childNames = new LinkedList<String>();
-		childIdNumbers = new LinkedList<String>();
+		anak = new LinkedList<Child>();
 	}
 	
 	/**
@@ -66,13 +61,11 @@ public class Employee {
 	}
 	
 	public void setSpouse(String spouseName, String spouseIdNumber) {
-		this.spouseName = spouseName;
-		this.spouseIdNumber = bio.getIdNumber();
+		this.spouse = new Spouse(spouseName, spouseIdNumber);
 	}
 	
 	public void addChild(String childName, String childIdNumber) {
-		childNames.add(childName);
-		childIdNumbers.add(childIdNumber);
+		anak.add(new Child(childName, childIdNumber));
 	}
 	
 	public int getAnnualIncomeTax() {
@@ -87,6 +80,6 @@ public class Employee {
 			monthWorkingInYear = 12;
 		}
 		
-		return TaxFunction.calculateTax(monthlySalary, otherMonthlyIncome, monthWorkingInYear, annualDeductible, spouseIdNumber.equals(""), childIdNumbers.size());
+		return TaxFunction.calculateTax(monthlySalary, otherMonthlyIncome, monthWorkingInYear, annualDeductible, spouse.getSpouseIdNumber().equals(""), anak.size());
 	}
 }
